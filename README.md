@@ -11,7 +11,6 @@ api_rabbit_connector/
 ├── tests/  
 │ ├── **init**.py  
 │ ├── test_api_rabbit_connector.py  
-│ ├── test_real_api_rabbit_connector.py  
 ├── .gitignore  
 ├── pyproject.toml  
 └── README.md
@@ -19,9 +18,8 @@ api_rabbit_connector/
 ## File description
 
 - **api_rabbit_connector/rabbit_connector.py**: The main module that manages the connection to RabbitMQ and message handling.
-- **tests/test_api_rabbit_connector.py**: Unit tests for testing RabbitConnector functionality using mock objects.
 
-- **tests/test_real_api_rabbit_connector.py**: Integration tests to verify interaction with a real RabbitMQ server.
+- **tests/test_api_rabbit_connector.py**: Unit tests for testing RabbitConnector functionality using mock objects.
 
 - **api_rabbit_connector/__init__.py**: Initializes the package by granting access to the class `RabbitConnector`.
 
@@ -103,5 +101,5 @@ To run the tests, use:
 ```
 poetry run pytest
 ```
-The test_real_api_rabbit_connector.py test will run without errors only with a real connection to Rabbitmq
+
 
