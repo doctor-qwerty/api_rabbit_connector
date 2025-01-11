@@ -1,5 +1,5 @@
 # API Rabbit Connector:
-The Rabbit Connector API is a package for interacting with RabbitMQ to process incoming messages and send the results back. The package can be easily integrated into other projects via a configuration dictionary.
+The Rabbit Connector API is a package for interacting with RabbitMQ to process incoming messages and send the results back. The package can be easily integrated into other projects via a configuration dictionary.It works as a constant listener of messages in the queue, i.e. in an infinite loop until stopped.
 
 ## Project structure
 
@@ -33,7 +33,7 @@ Add the following dependency to your `pyproject.toml`:
 ```toml
 [tool.poetry.dependencies]
 python = "^3.8"
-api_rabbit_connector = { git = "https://github.com/doctor-qwerty/api_rabbit_connector.git", branch = "master" }
+api_rabbit_connector = { git = "https://github.com/doctor-qwerty/api_rabbit_connector.git"}
 ```
 
 Install dependencies using Poetry:
@@ -48,30 +48,46 @@ Create a file `main.py` in your project and use `api_rabbit_connector` as follow
 ```python
 from api_rabbit_connector import RabbitConnector
 
+#from my_project.api import search  # Import the search function from the api module
+#or write the function here in the file
+def search(config):
+    """
+    Executes basic logic based on the configuration.
+    Here you can implement your own logic.
+    """
+    # Example of configuration processing
+    print(f"Performing search with config: {config}")
+    # Simulated machining
+    result = f"Search results for config: {config}"
+    return result
+
 def process_message(message):
     """
-    Processes the incoming message and returns the result.
+    Processes the incoming message using the search function and returns the result.
     """
-    command = message.get("command")
-    data = message.get("data")
-    print(f"Processing command: {command} with data: {data}")
+    # Getting the configuration from the message
+    config = message.get("config")
+    
+    # Execute basic logic using search
+    result = search(config)
+    
+    # Return the result in JSON format
+    return {"status": "success", "result": result}
 
-    # Example of data processing
-    processed_data = f"Processed {data} for command {command}"
-    return {"status": "success", "result": processed_data}
-
-if __name__ == "__main__":
+def main():
     config = {
-        'RABBITMQ_HOST': os.getenv('RABBITMQ_HOST', 'localhost'),
-        'RABBITMQ_PORT': int(os.getenv('RABBITMQ_PORT', 5672)),
-        'RABBITMQ_USER': os.getenv('RABBITMQ_USER', 'user'),
-        'RABBITMQ_PASSWORD': os.getenv('RABBITMQ_PASSWORD', 'pessword'),
-        'RABBITMQ_INPUT_QUEUE': 'input_queue',
-        'RABBITMQ_OUTPUT_QUEUE': 'output_queue'
+        'RABBITMQ_HOST': 'localhost',
+        'RABBITMQ_PORT': '5672',
+        'RABBITMQ_USER': 'user',
+        'RABBITMQ_PASSWORD': 'password',
+        'RABBITMQ_INPUT_QUEUE': 'input_queue'
     }
 
     connector = RabbitConnector(config, process_message)
     connector.start_consuming()
+
+if __name__ == "__main__":
+    main()
 ```
 ## Instructions for use
 
